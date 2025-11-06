@@ -1,0 +1,19 @@
+{
+  "name": "pokemon-reviews",
+  "version": "0.0.1",
+  "description": "A web app designed to be vulnerable to XSS and SQL Injection. It also contains a patched version too.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "SQL Injection",
+    "XSS"
+  ],
+  "author": "lukegjpotter",
+  "license": "Apache",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
