@@ -3,8 +3,6 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false })); // ToDo: Disable this to allow SQL Injection and XSS.
-// Local Imports
-const messages = require('./messages');
 // App Configuration
 const port = 3000;
 // Data Storage Todo: Move to database
@@ -21,14 +19,14 @@ const pokemonGameReviews = [
   { "game": "Pokémon Scarlet/Violet", "summary": "The latest in the series, offering a fully open-world experience with new mechanics and a fresh storyline." },
   { "game": "Pokémon Legends Z-A", "summary": "An upcoming title promising to expand the lore of the Pokémon universe with innovative gameplay features." }
 ];
-const searchResults = []; // Placeholder for search results
 
 // Middleware to serve dynamic content.
 app.set('view engine', 'ejs');
 
 // Homepage Route
 app.get('/', (req, res) => {
-  res.render('index', { message: messages.home, searchResults: searchResults, pokemonGameReviews: pokemonGameReviews });
+  const searchTerm = req.query.searchTerm || '';
+  res.render('index', { searchTerm: searchTerm, searchResults: [], pokemonGameReviews: pokemonGameReviews });
 });
 
 app.post('/search', (req, res, next) => {
@@ -40,21 +38,21 @@ app.post('/search', (req, res, next) => {
   }
   console.log(`Search Term Received: ${searchTerm}`);
   // Simple search logic
-  const results = pokemonGameReviews.filter(review =>
+  const searchResults = pokemonGameReviews.filter(review =>
     review.game.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  searchResults.length = 0; // Clear previous results
-  Array.prototype.push.apply(searchResults, results); // Update with new results
-  res.redirect('/');
-});
 
-app.get('/reviews', (req, res) => {
-  res.send(pokemonGameReviews.join('<br>'));
+  // Render results directly (no redirect).
+  res.render('index', {
+    searchTerm: searchTerm,
+    searchResults: searchResults,
+    pokemonGameReviews: pokemonGameReviews
+  });
 });
 
 // Default Route
 app.use((req, res) => {
-  res.status(404).send(messages.notFound);
+  res.status(404).send('404 - Page Not Found');
 });
 
 // Start Server
