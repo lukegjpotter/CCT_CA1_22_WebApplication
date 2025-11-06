@@ -2,4 +2,6 @@
 
 ## Build, Run and Test
 
-???
+To start the App use:
+
+    npm start
