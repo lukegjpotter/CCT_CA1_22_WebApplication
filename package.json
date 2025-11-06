@@ -22,6 +22,7 @@
   "homepage": "https://github.com/lukegjpotter/CCT_CA1_22_WebApplication#readme",
   "type": "commonjs",
   "dependencies": {
+    "body-parser": "^2.2.0",
     "express": "^5.1.0"
   }
 }

@@ -1,6 +1,11 @@
+// Module Imports
 const express = require('express');
-const messages = require('./messages');
 const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false })); // ToDo: Disable this to allow SQL Injection and XSS.
+// Local Imports
+const messages = require('./messages');
+// Settings
 const port = 3000;
 
 app.use(express.static('public'));
@@ -8,6 +13,12 @@ app.use(express.static('public'));
 // Homepage Route
 app.get('/', (req, res) => {
   res.send(messages.home);
+});
+
+app.post('/submit', (req, res) => {
+  const searchTerm = req.body.searchTerm;
+  console.log(`Search Term Received: ${searchTerm}`);
+  res.send(`You searched for: ${searchTerm}`);
 });
 
 // Default Route
