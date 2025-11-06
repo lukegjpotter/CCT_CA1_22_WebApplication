@@ -7,6 +7,7 @@ app.use(bodyParser.urlencoded({ extended: false })); // ToDo: Disable this to al
 const port = 3000;
 // Persist reviews in SQLite.
 const db = require('./db/sqlite');
+const searchHelper = require('./lib/search');
 
 // Middleware to serve dynamic content.
 app.set('view engine', 'ejs');
@@ -15,8 +16,8 @@ app.set('view engine', 'ejs');
 app.get('/', async (req, res, next) => {
   try {
     const searchTerm = req.query.searchTerm || '';
-    const reviews = await db.allReviews();
-    res.render('index', { searchTerm: searchTerm, searchResults: [], pokemonGameReviews: reviews });
+    const { reviews, searchResults } = await searchHelper.performSearch(searchTerm);
+    res.render('index', { searchTerm: searchTerm, searchResults: searchResults, pokemonGameReviews: reviews });
   } catch (err) {
     next(err);
   }
@@ -40,10 +41,7 @@ app.post('/search', async (req, res, next) => {
       });
     }
 
-    // Simple search logic via DB
-    const searchResults = await db.searchReviews(searchTerm);
-    const reviews = await db.allReviews();
-    // Render results directly (no redirect).
+    const { reviews, searchResults } = await searchHelper.performSearch(searchTerm);
     res.render('index', {
       searchTerm: searchTerm,
       searchResults: searchResults,
@@ -70,8 +68,7 @@ app.get('/search', async (req, res, next) => {
       });
     }
 
-    const searchResults = await db.searchReviews(searchTerm);
-    const reviews = await db.allReviews();
+    const { reviews, searchResults } = await searchHelper.performSearch(searchTerm);
     res.render('index', {
       searchTerm: searchTerm,
       searchResults: searchResults,
