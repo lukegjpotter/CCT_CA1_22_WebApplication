@@ -30,19 +30,51 @@ app.get('/', (req, res) => {
 });
 
 app.post('/search', (req, res, next) => {
-  const searchTerm = req.body.searchTerm;
+  // Read searchTerm only from the POST body (form submission).
+  const searchTerm = (req.body && req.body.searchTerm) ? req.body.searchTerm : '';
+  
+  // Log that the term was received from the request body
+  console.log(`POST /search received searchTerm: ${searchTerm}`);
+
+  // If no term provided, render home with empty results
   if (!searchTerm) {
-    const err = new Error('Search term is required');
-    err.status = 400;
-    return next(err);
+    return res.render('index', {
+      searchTerm: '',
+      searchResults: [],
+      pokemonGameReviews: pokemonGameReviews
+    });
   }
-  console.log(`Search Term Received: ${searchTerm}`);
   // Simple search logic
   const searchResults = pokemonGameReviews.filter(review =>
     review.game.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Render results directly (no redirect).
+  res.render('index', {
+    searchTerm: searchTerm,
+    searchResults: searchResults,
+    pokemonGameReviews: pokemonGameReviews
+  });
+});
+
+// Support GET /search?searchTerm=... so clients can bookmark or use links
+app.get('/search', (req, res) => {
+  const searchTerm = req.query && req.query.searchTerm ? req.query.searchTerm : '';
+  console.log(`GET /search received searchTerm: ${searchTerm}`);
+
+  // If no term provided, render home with empty results
+  if (!searchTerm) {
+    return res.render('index', {
+      searchTerm: '',
+      searchResults: [],
+      pokemonGameReviews: pokemonGameReviews
+    });
+  }
+
+  const searchResults = pokemonGameReviews.filter(review =>
+    review.game.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   res.render('index', {
     searchTerm: searchTerm,
     searchResults: searchResults,
