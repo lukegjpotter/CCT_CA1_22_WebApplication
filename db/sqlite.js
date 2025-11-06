@@ -60,8 +60,10 @@ async function allReviews() {
 }
 
 async function searchReviews(term) {
-  const like = `%${term.toLowerCase()}%`;
-  return all('SELECT * FROM reviews WHERE LOWER(game) LIKE ? ORDER BY id', [like]);
+  // WARNING: This is intentionally vulnerable to SQL injection for demonstration
+  const vulnerableQuery = `SELECT * FROM reviews WHERE LOWER(game) LIKE '%${term.toLowerCase()}%' ORDER BY id`;
+  console.log(`[DB] Executing: ` + vulnerableQuery);
+  return all(vulnerableQuery);
 }
 
 module.exports = { db, init, seed, allReviews, searchReviews };

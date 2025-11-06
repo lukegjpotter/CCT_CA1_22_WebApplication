@@ -11,7 +11,7 @@
     </form>
 
     <% if (searchResults.length != 0) { %>
-        <h2>Search Results for: <%= searchTerm %></h2>
+        <h2>Search Results for: <%- searchTerm %></h2>
         <ul>
             <% searchResults.forEach(function(pokemonGameReview) { %>
                 <li><%= pokemonGameReview.game %></li>

