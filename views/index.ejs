@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pokémon Reviews</title>
+</head>
+<body>
+    <h1><%= message %></h1>
+    <form action="/search" method="post">
+    <input type="text" name="searchTerm" placeholder="Enter a game name" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Search Results:</h2>
+    <ul>
+        <% searchResults.forEach(function(pokemonGameReview) { %>
+            <li><%= pokemonGameReview.game %></li>
+        <% }); %>
+    </ul>
+
+    <h2>All Game Reviews:</h2>
+    <ul>
+        <% pokemonGameReviews.forEach(function(pokemonGameReview) { %>
+            <li><%= pokemonGameReview.game %></li>
+        <% }); %>
+    </ul>
+    </body>
+</html>

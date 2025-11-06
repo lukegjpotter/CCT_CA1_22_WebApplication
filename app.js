@@ -21,16 +21,17 @@ const pokemonGameReviews = [
   { "game": "Pokémon Scarlet/Violet:", "summary": "The latest in the series, offering a fully open-world experience with new mechanics and a fresh storyline." },
   { "game": "Pokémon Legends Z-A:", "summary": "An upcoming title promising to expand the lore of the Pokémon universe with innovative gameplay features." }
 ];
+const searchResults = []; // Placeholder for search results
 
-// Middleware to serve static files
-app.use(express.static('public'));
+// Middleware to serve dynamic content.
+app.set('view engine', 'ejs');
 
 // Homepage Route
 app.get('/', (req, res) => {
-  res.send(messages.home);
+  res.render('index', { message: messages.home, searchResults: searchResults, pokemonGameReviews: pokemonGameReviews });
 });
 
-app.post('/submit', (req, res, next) => {
+app.post('/search', (req, res, next) => {
   const searchTerm = req.body.searchTerm;
   if (!searchTerm) {
     const err = new Error('Search term is required');
@@ -38,7 +39,13 @@ app.post('/submit', (req, res, next) => {
     return next(err);
   }
   console.log(`Search Term Received: ${searchTerm}`);
-  res.send(`You searched for: ${searchTerm}`);
+  // Simple search logic
+  const results = pokemonGameReviews.filter(review =>
+    review.game.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  searchResults.length = 0; // Clear previous results
+  Array.prototype.push.apply(searchResults, results); // Update with new results
+  res.redirect('/');
 });
 
 app.get('/reviews', (req, res) => {
