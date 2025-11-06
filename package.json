@@ -6,12 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukegjpotter/CCT_CA1_22_WebApplication.git"
+  },
   "keywords": [
     "SQL Injection",
     "XSS"
   ],
   "author": "lukegjpotter",
   "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/lukegjpotter/CCT_CA1_22_WebApplication/issues"
+  },
+  "homepage": "https://github.com/lukegjpotter/CCT_CA1_22_WebApplication#readme",
   "type": "commonjs",
   "dependencies": {
     "express": "^5.1.0"
