@@ -18,10 +18,17 @@
     </ul>
 
     <h2>All Game Reviews:</h2>
-    <ul>
-        <% pokemonGameReviews.forEach(function(pokemonGameReview) { %>
-            <li><%= pokemonGameReview.game %></li>
-        <% }); %>
-    </ul>
+    <p>We have <%= pokemonGameReviews.length %> reviews in our Database.</p>
+    <table>
+        <thead>
+            <th>Game</th><th>Summary</th>
+        </thead><tbody>
+            <% pokemonGameReviews.forEach(function(pokemonGameReview) { %>
+                <tr><td><%= pokemonGameReview.game %></td>
+                <td><%= pokemonGameReview.summary %></td></tr>
+            <% }); %>
+        </tbody>
+    </table>
+
     </body>
 </html>
