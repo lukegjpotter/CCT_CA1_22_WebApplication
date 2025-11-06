@@ -18,7 +18,11 @@
     </ul>
 
     <h2>All Game Reviews:</h2>
-    <p>We have <%= pokemonGameReviews.length %> reviews in our Database.</p>
+    <% if (pokemonGameReviews.length === 0) { %>
+        <p>No reviews available. Hopefully we have not been SQL Injected.</p>
+    <% } else { %>
+        <p>We have <%= pokemonGameReviews.length %> reviews in our Database.</p>
+    <% } %>
     <table>
         <thead>
             <th>Game</th><th>Summary</th>
